@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="./bootstrap-4.3.1/css/bootstrap-min.css" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="./bootstrap-4.3.1/js/jquery-3.3.1-slim-min.js" crossorigin="anonymous"></script>
+    <script src="./bootstrap-4.3.1/js/popper-1.14.7-min.js" crossorigin="anonymous"></script>
+    <script src="./bootstrap-4.3.1/js/bootstrap-min.js" crossorigin="anonymous"></script>
+    
+    <style>
+
+    </style>   
+    
+    <title>ZaQiXu</title>
+</head>
+
+<body>
+
+<nav class="navbar nav navbar-expand-sm navbar-dark bg-dark sticky-top">
+  <a class="navbar-brand" href="#"><b>ZaQiXu</b></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+     <!--
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      -->
+      <li class="nav-item">
+        <span class="nav-text badge badge-secondary badge-pill">sowpods-us</span>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" id="two-letter">2-letter</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" id="three-letter">3-letter</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" id="dists" href="distribution.html">Dists</a>
+      </li>      
+      <li class="nav-item">
+        <span class="nav-text badge badge-success badge-pill" id="count">*</span>
+      </li>
+    </ul>
+    
+    <form class="form-inline my-2 my-lg-0">
+        <div class="input-group">  
+          <div class="input-group-prepend">
+            <button class="btn btn-outline-info input-group-text" type="button" data-toggle="button" id="caret">^</button>
+          </div>
+          
+          <input type="text" class="form-control" placeholder="regex pattern" id="q" name="q" autocorrect="off" autocapitalize="none">
+        
+          <div class="input-group-append">  
+            <button class="btn btn-outline-info input-group-text" type="button" id="dollar">$</button>
+            <button class="btn btn-outline-danger input-group-text" type="button" id="clear">&times;</button>
+          </div>
+        </div>
+    </form>
+
+  </div>
+</nav>
+
+<div class="container-fluid">
+<!--
+  <div class="row">
+    <ul>
+      <li><kbd>^</kbd> - anchor start of word</li>
+      <li><kbd>$</kbd> - anchor end of word</li>
+      <li><kbd>.</kbd> - any letter </li>
+      <li><kbd>&times</kbd> - clear</li>             
+    </ul>
+  </div>
+  -->
+  <div class="row">
+    <code class="col" id="words">
+    </code>
+  </div>
+</div>
+
+
+<script>
+
+  var allWords, currentWords;
+  
+  $().ready(function(){
+      fetch("sowpods us twl06.txt")
+      .then(response => response.text())
+      .then(function(wordlist) {
+           allWords = wordlist.split(/\s+/)
+             .filter(word => word.length < 10)
+        refresh();
+      });
+  });
+  
+  $("#q").keyup(function(e) {
+    let q = $("#q").val()
+      .replace(/\s*/g,'')
+      .replace(/(.+)\^/g,'$1')
+      .replace(/\$(.+)/g,'$1');
+    $("#q").val(q);
+    //console.log(`pattern now '${q}'`);
+    refresh(q);
+  });
+    
+  $("#caret").click(e => {
+    let $btn = $(e.target);
+    //console.log(`clicked ${$btn.attr("id")}`);
+    let pattern = $("#q").val().replace(/\s*/g,'');
+    
+    if (pattern.match(/\^+/)) {
+      pattern = pattern.replace(/\^/g,'');
+      $btn.removeClass("active").prop("aria-pressed", false);
+    }
+    else {  
+      pattern = `^${pattern}`;
+      $btn.addClass("active").prop("aria-pressed", true);;
+    }
+    $("#q").val(pattern);
+    refresh(pattern);   
+  });
+  
+  $("#dollar").click(e => {
+    let $btn = $(e.target);
+    //console.log(`clicked ${$btn.attr("id")}`);
+    let pattern = $("#q").val().replace(/\s*/g,'');
+    
+    if (pattern.match(/\$+/)) {
+      pattern = pattern.replace(/\$/g,'');
+      $btn.removeClass("active").prop("aria-pressed", false);
+    }
+    else {  
+      pattern = `${pattern}$`;
+      $btn.addClass("active").prop("aria-pressed", true);;
+    }
+    $("#q").val(pattern);
+    refresh(pattern);   
+  });
+    
+  $("#clear").click(e => {
+    $("#q").val('');
+    resetActive();
+    refresh('');  
+  });
+  
+  $("#two-letter").click(e => {
+    $("#q").val('^..$');
+    refresh('^..$');  
+  });
+  
+  $("#three-letter").click(e => {
+    $("#q").val('^...$');
+    refresh('^...$');  
+  });
+  
+  function resetActive() {
+    $("button").removeClass("active");
+  }
+    
+  function refresh(pattern = '') {
+    pattern = pattern.replace(/\s*/g,'').replace(/[^a-z\^\$]/gi,'.');
+      
+    if (pattern === '') {
+      currentWords = allWords;
+    }
+    else if (pattern.length >= 2) {
+      pattern = new RegExp(pattern, "i");
+      currentWords = allWords.filter(w => w.match(pattern));
+    }
+    
+    //console.log(`found ${currentWords.length} words`);
+    updateView();
+  }    
+  
+  function updateView() {
+    $("#count").text(currentWords.length);
+    $("#words").text(currentWords.join(", "));
+  }
+  
+</script>
+
+
+<script>
+  if('serviceWorker' in navigator) {
+    navigator.serviceWorker
+             .register('sw.js')
+             .then(function() { console.log("Service Worker Registered"); });
+  }
+  </script>
+</body>
+</html>

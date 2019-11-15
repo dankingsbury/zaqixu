@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="./bootstrap-4.3.1/css/bootstrap-min.css" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="./bootstrap-4.3.1/js/jquery-3.3.1-slim-min.js" crossorigin="anonymous"></script>
+    <script src="./bootstrap-4.3.1/js/popper-1.14.7-min.js" crossorigin="anonymous"></script>
+    <script src="./bootstrap-4.3.1/js/bootstrap-min.js" crossorigin="anonymous"></script>
+    
+    <style>
+
+    </style>   
+    
+    <title>ZaQiXu</title>
+</head>
+
+<body>
+
+<nav class="navbar nav navbar-expand-sm navbar-dark bg-dark sticky-top">
+  <a class="navbar-brand" href="#"><b>ZaQiXu</b></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <!--
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+
+      <li class="nav-item">
+        <span class="nav-text badge badge-secondary badge-pill">sowpods-us</span>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" id="two-letter">2-letter</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" id="three-letter">3-letter</a>
+      </li>
+      <li class="nav-item">
+        <span class="nav-text badge badge-success badge-pill" id="count">*</span>
+      </li>
+    </ul>
+    
+    <form class="form-inline my-2 my-lg-0">
+        <div class="input-group">  
+          <div class="input-group-prepend">
+            <button class="btn btn-outline-info input-group-text" type="button" data-toggle="button" id="caret">^</button>
+          </div>
+          
+          <input type="text" class="form-control" placeholder="regex pattern" id="q" name="q" autocorrect="off" autocapitalize="none">
+        
+          <div class="input-group-append">  
+            <button class="btn btn-outline-info input-group-text" type="button" id="dollar">$</button>
+            <button class="btn btn-outline-danger input-group-text" type="button" id="clear">&times;</button>
+          </div>
+        </div>
+    </form>
+  -->
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <h1>Distribution</h1>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h3>Outspell</h3>
+      <pre id="outspell">
+      </pre>
+    </div>
+    <div class="col">
+      <h3>Scrabble</h3>
+      <pre class="col" id="scrabble">
+      </pre>
+    </div>  
+  </div>
+</div>
+
+
+<script>
+  
+  $().ready(function(){
+      fetch("outspell-letters.txt")
+      .then(response => response.text())
+      .then(text => calculateDistribution(text, "#outspell"))
+      ;
+
+      fetch("scrabble-letters.txt")
+      .then(response => response.text())
+      .then(text => calculateDistribution(text, "#scrabble"))
+      ;
+  });
+  
+  function calculateDistribution(data, elt) {
+    let letters = data.toLowerCase().replace(/\s+/g,'').split('').sort();
+    //console.log(elt);
+    //console.log(data);
+    //console.log(letters.join('|'));
+    
+    let dists = letters.reduce(function(a,c,i,s){
+      a[c] = a[c] ? a[c] + 1 : 1 ;
+      return a;
+    },{});
+    
+    let distsByCount = Object.entries(dists).reduce(function(a,c,i,s) {
+      let [k,v] = c;
+      a[v] = a[v] ? `${a[v]} ${k}` : k ;
+      return a;
+    },{});
+    
+    $(elt).text(
+      JSON.stringify(dists,null,2) 
+      + "\n\n" +
+      JSON.stringify(distsByCount,null,2)
+    );
+    //$(elt).data('dists', dists);
+    //$(elt).data('distsByCount', distsByCount);
+  }
+  
+// reduce(callback(a,c,i,s){return a}, initial)
+// console.log('compiled');
+  
+</script>
+
+</body>
+</html>
