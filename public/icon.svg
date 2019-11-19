@@ -1,21 +1,25 @@
-<svg width="320px" height="320px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-  <!-- Materialisation of anchors -->
-  <path d="M60,15 L60,110 M30,40 L90,40 M30,75 L90,75 M30,110 L90,110" stroke="grey" stroke-width="0.1"/>
+<svg width="1024px" height="1024px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2.9" y="2.9" width="95" height="95" rx="5" ry="5" stroke-width="1" stroke="black" fill="black" />
+  <rect x="3" y="3" width="94" height="94" rx="5" ry="5" stroke-width="0.1" stroke="grey" fill="#F4EFD3" />
+  
 
-  <!-- Anchors in action -->
-  <text text-anchor="start" x="60" y="40">Z</text>
-  <text text-anchor="middle" x="60" y="75">Z</text>
-  <text text-anchor="end" x="60" y="110">Z</text>
-
-  <!-- Materialisation of anchors -->
-  <circle cx="60" cy="40" r="3" fill="red" />
-  <circle cx="60" cy="75" r="3" fill="red" />
-  <circle cx="60" cy="110" r="3" fill="red" />
-
+    <text class="letter" text-anchor="middle" x="42" y="88">Z</text>
+    <text class="score" text-anchor="middle" x="83" y="88">10</text>
+  
   <style><![CDATA[
-  text {
-    font: 36px Verdana, Helvetica, Arial, sans-serif;
+  text.letter {
+    font: 108px Helvetica, Arial, Verdana, sans-serif;
   }
+
+  text.score {
+      font: 16px Helvetica, Arial, Verdana, sans-serif;
+  }
+
+  path {
+    rx: 10px;
+    ry: 10px;
+  }
+
   ]]></style>
 
   <script><![CDATA[
