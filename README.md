@@ -1,6 +1,6 @@
 # ZaQiXu #
 
-#### Word finder for puzzles and word games ##
+*Word finder for puzzles and word games*
 
 ## TODO ##
 
@@ -11,9 +11,10 @@
 * Ability to change dictionary 
 * Ability to use multiple dicts (e.g. proper names, basic French)
 * Ability to combine words (e.g SETAPART) for xwords
+* Ability to select letter limit (default 8)
 * Easier ability to find words from tray (signature by alphabetizing letters?)
-
-* pure SPA/FAAS approach
-* offline ability (home screen)
-
-
+* Simplify RegEx format (start and end anchors from text)
+* Fix mobile navbar - text field always visible, simpler buttons
+* Pure PWA/FAAS approach
+* Offline ability (home screen)
+* Homescreen icon from https://github.com/onderceylan/pwa-asset-generator

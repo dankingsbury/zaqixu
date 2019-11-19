@@ -15,11 +15,6 @@
       font: 16px Helvetica, Arial, Verdana, sans-serif;
   }
 
-  path {
-    rx: 10px;
-    ry: 10px;
-  }
-
   ]]></style>
 
   <script><![CDATA[
